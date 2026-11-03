@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>垃圾识别与指向演示</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202a27;
+      --muted: #69756f;
+      --line: #dfe6e2;
+      --canvas: #f2f5f3;
+      --white: #fff;
+      --green: #176c5b;
+      --green-soft: #e7f3ed;
+      --orange: #db783c;
+      --orange-soft: #fff0e7;
+      --yellow: #f0c95c;
+      --yellow-soft: #fff7df;
+      --red: #b74e45;
+      --red-soft: #faece9;
+      --radius: 7px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-width: 320px; color: var(--ink); background: var(--canvas);
+      font: 14px/1.42 "Segoe UI", "Noto Sans CJK SC", "Microsoft YaHei UI", sans-serif;
+    }
+    button { font: inherit; cursor: pointer; }
+    .shell { min-height: 100vh; padding: 0 12px 8px; }
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      min-height: 44px; border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .brand-mark {
+      display: grid; place-items: center; width: 27px; height: 27px;
+      border-radius: 8px; color: #173e35; background: #d8efaa; font-weight: 800;
+    }
+    h1 { margin: 0; font-size: 14px; font-weight: 700; }
+    .sub { display: none; }
+    .top-status { display: flex; align-items: center; gap: 8px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px;
+      border: 1px solid var(--line); border-radius: 5px; background: var(--white);
+      color: var(--muted); font-size: 10px; white-space: nowrap;
+    }
+    .tag.demo { border-color: #ebd99e; color: #74571a; background: var(--yellow-soft); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #82b985; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 350px); gap: 10px; align-items: stretch; height: calc(100vh - 54px); }
+    .column { display: grid; align-content: start; gap: 8px; min-width: 0; min-height: 0; }
+    .panel { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); }
+    .panel-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      min-height: 36px; padding: 0 10px; border-bottom: 1px solid #edf1ee;
+    }
+    .panel-head strong { font-size: 12px; }
+    .muted { color: var(--muted); font-size: 10px; }
+    .camera-panel { display: flex; flex-direction: column; height: 100%; }
+    .feed-grid { display: block; flex: 1; min-height: 0; padding: 6px 7px 0; }
+    .feed { min-width: 0; overflow: hidden; border: 1px solid #e2e8e4; border-radius: 5px; background: #26312d; }
+    .feed-top, .feed-bottom {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 4px 7px; color: #e8efeb; font-size: 9px;
+    }
+    .feed-bottom { color: #a9b9b1; background: #26312d; }
+    #frame {
+      display: block; width: 100%; height: calc(100vh - 185px); min-height: 260px; max-height: 760px; object-fit: contain;
+      background: #1a211e;
+    }
+    .view-switch { display: inline-flex; padding: 3px; border: 1px solid var(--line); border-radius: 6px; background: #f2f5f3; }
+    .view-button { min-width: 82px; height: 29px; border: 0; border-radius: 4px; color: #53615a; background: transparent; font-size: 10px; }
+    .view-button.active { color: white; background: #176c5b; }
+    .frame-note { color: #a9b9b1; font-size: 9px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid #edf1ee; }
+    .stat { padding: 9px 12px; border-right: 1px solid #edf1ee; }
+    .stat:last-child { border: 0; }
+    .stat label { color: var(--muted); font-size: 9px; }
+    .stat strong { display: block; margin-top: 3px; font-size: 15px; }
+    .stat strong.green { color: var(--green); }
+    .controls { padding: 6px 7px 7px; border-top: 1px solid #edf1ee; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .button {
+      min-height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 5px;
+      color: #34413b; background: white; font-size: 10px; font-weight: 650;
+    }
+    .button:hover { background: #f6faf7; border-color: #b5cbbf; }
+    .button.primary { border-color: var(--green); color: white; background: var(--green); }
+    .button.primary:hover { background: #105646; }
+    .button.stop { color: #9f3e37; border-color: #e7bcb7; background: #fff8f7; }
+    .button.confirm { color: #286947; border-color: #b9dbc6; background: #f0faf3; }
+    .button:disabled { opacity: .45; cursor: not-allowed; }
+    .control-foot { margin-top: 5px; color: var(--muted); font-size: 9px; }
+    .target-list { display: grid; gap: 0; max-height: 62vh; overflow: auto; padding: 0 9px 8px; }
+    .target-head, .target {
+      display: grid; grid-template-columns: 42px minmax(64px, .85fr) minmax(105px, 1.35fr) minmax(72px, auto);
+      align-items: center; gap: 7px;
+    }
+    .target-head { min-height: 34px; padding: 0 10px; color: var(--muted); background: #f5f7f6; font-size: 10px; font-weight: 700; }
+    .target {
+      grid-template-columns: 42px minmax(64px, .85fr) minmax(105px, 1.35fr) minmax(72px, auto);
+      min-height: 42px; padding: 5px 10px; border-bottom: 1px solid #edf1ee;
+      cursor: pointer;
+    }
+    .target.current { background: #fff0bf; box-shadow: inset 4px 0 #dfad32; }
+    .target.current:hover { background: #ffe9a6; }
+    .target.selected:not(.current) { background: #f0f6f2; box-shadow: inset 3px 0 #9fbcaa; }
+    .target:hover { background: #f6faf7; }
+    .target.visited { background: #f6fbf7; }
+    .number {
+      display: block; color: #617169; font-size: 10px; font-weight: 700; text-align: center;
+    }
+    .target.current .number { color: #765a1a; background: #fff0bf; border-color: #e8cd79; }
+    .target.visited .number { color: #2a704b; background: var(--green-soft); border-color: #b9dcc7; }
+    .target-name { overflow: hidden; font-size: 10px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+    .target-detail { display: block; color: #52615a; font-size: 10px; white-space: nowrap; }
+    .state {
+      padding: 4px 6px; border-radius: 4px; color: #65716b; background: #f0f3f1;
+      font-size: 9px; white-space: nowrap;
+    }
+    .target.current .state { color: #755719; background: #fff0c5; }
+    .target.visited .state { color: #286947; background: var(--green-soft); }
+    .progress-label { display: flex; justify-content: space-between; gap: 8px; margin: 5px 0 4px; color: var(--muted); font-size: 9px; }
+    .track { height: 5px; overflow: hidden; border-radius: 9px; background: #e9eeeb; }
+    .fill { width: 0; height: 100%; background: var(--green); transition: width .2s linear; }
+    .target-progress { grid-column: 1 / -1; align-self: stretch; width: 100%; padding: 0 2px 3px; }
+    .target-progress .progress-label { margin: 3px 0 4px; }
+    .logs { display: grid; }
+    .log { display: grid; grid-template-columns: 48px 7px minmax(0,1fr); gap: 7px; padding: 8px 11px; border-bottom: 1px solid #edf1ee; font-size: 9px; }
+    .time { color: #89958f; }
+    .log-dot { width: 6px; height: 6px; margin-top: 4px; border-radius: 50%; background: #77b58b; }
+    .log-dot.warn { background: var(--yellow); }
+    .log-dot.info { background: #80a9bb; }
+    .log-message { color: #4f5c56; }
+    .status-line { display: flex; flex-wrap: wrap; gap: 7px; padding: 9px 11px; }
+    .status-chip { padding: 5px 7px; border-radius: 4px; color: #56635d; background: #f1f4f2; font-size: 9px; }
+    .status-chip.ok { color: #286947; background: var(--green-soft); }
+    .footer { display: none; }
+    .toast {
+      position: fixed; right: 18px; bottom: 18px; z-index: 10; max-width: min(400px, calc(100vw - 30px));
+      padding: 10px 13px; border: 1px solid #bfd9ca; border-radius: 5px; color: #285c43;
+      background: white; box-shadow: 0 7px 22px #1c352c1a; opacity: 0; transform: translateY(7px);
+      pointer-events: none; transition: .2s; font-size: 10px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr) 290px; gap: 8px; }
+      .shell { padding-inline: 8px; }
+      #frame { height: calc(100vh - 185px); min-height: 220px; }
+    }
+    @media (max-width: 600px) {
+      .shell { padding: 0 8px 14px; }
+      .layout { grid-template-columns: 1fr; height: auto; }
+      header { min-height: 42px; }
+      .top-status .tag:first-child { display: none; }
+      h1 { font-size: 14px; }
+      #frame { height: 52vh; min-height: 220px; }
+      .status-line { gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">R</div>
+        <div><h1>垃圾识别与指向演示</h1><div class="sub">KV260 · YOLOv5s 六类垃圾</div></div>
+      </div>
+      <div class="top-status">
+        <span class="tag demo">本机离线运行</span>
+        <span class="tag"><span class="dot"></span><span id="connection">等待板端程序</span></span>
+      </div>
+    </header>
+    <main class="layout">
+      <section class="column">
+        <section class="panel camera-panel">
+          <div class="panel-head">
+            <strong>相机实时画面</strong>
+            <div class="view-switch" role="group" aria-label="选择相机画面">
+              <button class="view-button active" id="leftViewBtn" type="button" data-side="left">左相机</button>
+              <button class="view-button" id="rightViewBtn" type="button" data-side="right">右相机</button>
+            </div>
+            <span class="muted" id="frameState">等待相机画面</span>
+          </div>
+          <div class="feed-grid">
+            <div class="feed">
+              <img id="frame" src="/api/frame.jpg?side=left" alt="KV260 单目实时检测画面">
+            </div>
+          </div>
+          <div class="controls">
+            <div class="button-row">
+              <button class="button primary" id="startBtn" data-action="start">▶　开始打扫</button>
+              <button class="button stop" id="stopBtn" data-action="stop">■　停止</button>
+              <button class="button" id="resetBtn" data-action="reset">↺　重置</button>
+              <button class="button confirm" id="clearBtn" data-action="mark_cleared" disabled>✓　确认已清除</button>
+              <button class="button" id="quitBtn" data-action="quit">退出</button>
+            </div>
+          </div>
+        </section>
+      </section>
+      <aside class="column">
+        <section class="panel">
+          <div class="panel-head"><strong>垃圾目标</strong><span class="muted" id="targetCount">0 个</span></div>
+          <div class="target-head" aria-hidden="true"><span>序号</span><span>种类</span><span>实际坐标</span><span>状态</span></div>
+          <div class="target-list" id="targetList"><div class="target"><span class="number">—</span><span class="target-name">等待检测</span><span class="target-detail">—</span><span class="state">待机</span></div></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><strong>设备状态</strong><span class="muted">KV260 本机</span></div>
+          <div class="status-line"><span class="status-chip" id="cameraStatus">相机：等待</span><span class="status-chip" id="dpuStatus">DPU：等待</span></div>
+          <div class="status-line"><span class="status-chip" id="aimStatus">振镜：预览</span><span class="status-chip" id="boundaryStatus">指向边界：关闭</span><span class="status-chip">激光电源：独立控制</span></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><strong>运行记录</strong><span class="muted">最近事件</span></div>
+          <div class="logs" id="logs"><div class="log"><span class="time">—</span><span class="log-dot info"></span><span class="log-message">等待运行事件</span></div></div>
+        </section>
+      </aside>
+    </main>
+    <div class="footer">数据在 KV260 本机处理；页面仅通过 localhost 与同一台板端程序通信，不需要互联网。</div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      let toastTimer;
+      let activeSide = "left";
+      const classNamesZh = {
+        Cans: "易拉罐", Glass_Bottles: "玻璃瓶", Paper: "纸类",
+        Plastic: "塑料", Textile: "纺织物", other: "其他",
+      };
+      function classNameZh(name) { return classNamesZh[name] || name || "未分类"; }
+      function targetStatus(target) {
+        return target.cleared ? "已确认清除" :
+          target.status === "visited" ? "已访问" :
+          target.status === "holding" ? "处理中" :
+          target.status === "skipped" ? "已跳过" :
+          target.status === "stopped" ? "已停止" :
+          target.status === "current" ? "当前目标" : "待处理";
+      }
+      function coordinates(target) {
+        const point = target.ground_position_mm;
+        return Array.isArray(point) && point.length === 2 && point.every(Number.isFinite)
+          ? `X ${Math.round(point[0])} · Y ${Math.round(point[1])} mm` : "未标定";
+      }
+      function toast(text) {
+        $("toast").textContent = text;
+        $("toast").classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => $("toast").classList.remove("show"), 2300);
+      }
+      function send(action, targetId) {
+        fetch("/api/action", {
+          method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({action, target_id: targetId}),
+        }).then(async (response) => {
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "操作失败");
+          toast(data.message || "已发送");
+          pollState();
+        }).catch(() => toast("本机程序未连接，确认 run_rubbish_demo.py 正在运行。"));
+      }
+      function targetRow(target, currentId, selectedId) {
+        const stateText = targetStatus(target);
+        const cls = [
+          target.cleared || target.status === "visited" ? "visited" : "",
+          target.id === currentId && target.status === "holding" ? "current" : "",
+          target.id === selectedId ? "selected" : "",
+        ].filter(Boolean).join(" ");
+        const progress = target.status === "holding"
+          ? `<div class="target-progress"><div class="progress-label"><span>处理进度</span><span>${Number(target.remaining_s || 0).toFixed(1)} 秒</span></div><div class="track"><div class="fill" style="width:${Math.max(0,Math.min(100,target.dwell_percent || 0))}%"></div></div></div>`
+          : "";
+        return `<div class="target ${cls}" data-target="${target.id}" tabindex="0">
+          <span class="number">${target.cleared ? "✓" : String(target.id).padStart(2,"0")}</span>
+          <span class="target-name">${classNameZh(target.class_name)}</span>
+          <span class="target-detail">${coordinates(target)}</span>
+          <span class="state">${stateText}</span>
+          ${progress}
+        </div>`;
+      }
+      async function pollState() {
+        try {
+          const response = await fetch(`/api/state?t=${Date.now()}`, {cache:"no-store"});
+          if (!response.ok) throw new Error("offline");
+          const state = await response.json();
+          if (!Array.isArray(state.camera_views) ||
+              !state.camera_views.includes("left") || !state.camera_views.includes("right")) {
+            $("frame").hidden = true;
+            $("frame").style.visibility = "hidden";
+            $("connection").textContent = "板端 Python 版本不匹配";
+            $("frameState").textContent = "请同时更新 .py 和 .html，并重启 Python 程序";
+            return;
+          }
+          $("frame").hidden = false;
+          $("frame").style.visibility = "visible";
+          $("connection").textContent = "本机程序已连接";
+          $("frameState").textContent = state.camera_ok ? "相机画面接收中" : "等待相机画面";
+          $("targetCount").textContent = `${(state.targets || []).length} 个`;
+          $("cameraStatus").textContent = state.camera_ok ? "相机：正常" : "相机：等待";
+          $("dpuStatus").textContent = state.dpu_ok ? "DPU：正常" : "DPU：等待";
+          $("aimStatus").textContent = state.mode === "aim" ? "振镜：已启用" : "振镜：预览";
+          const boundary = state.aim_boundary || {};
+          $("boundaryStatus").textContent = boundary.enabled
+            ? "指向边界：已显示" : "指向边界：关闭";
+          $("boundaryStatus").classList.toggle("ok", Boolean(boundary.enabled));
+          const targets = state.targets || [];
+          $("targetList").innerHTML = targets.length
+            ? targets.map((target) => targetRow(target,state.current_id,state.selected_id)).join("")
+            : '<div class="target"><span class="number">—</span><span class="target-name">等待检测</span><span class="target-detail">请将目标放入相机视野</span><span class="state">待机</span></div>';
+          $("targetList").querySelectorAll("[data-target]").forEach((item) => {
+            const select = () => send("select_target", Number(item.dataset.target));
+            item.addEventListener("click", select);
+            item.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(); }
+            });
+          });
+          const current = targets.find((target) => target.id === state.selected_id) ||
+            targets.find((target) => target.id === state.current_id) ||
+            targets.find((target) => target.status === "holding") || null;
+          $("clearBtn").disabled = !current || current.status !== "visited" || current.cleared;
+          $("frame").src = `/api/frame.jpg?side=${activeSide}&t=${Date.now()}`;
+          if ($("logs") && Array.isArray(state.logs)) {
+            $("logs").innerHTML = state.logs.slice(-5).reverse().map((log) =>
+              `<div class="log"><span class="time">${log.time || "—"}</span><span class="log-dot ${log.kind || ""}"></span><span class="log-message">${String(log.message || "").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}</span></div>`
+            ).join("") || '<div class="log"><span class="time">—</span><span class="log-dot info"></span><span class="log-message">暂无事件</span></div>';
+          }
+        } catch (_) {
+          $("connection").textContent = "等待板端程序";
+          $("frameState").textContent = "请启动本机检测程序";
+        }
+      }
+      document.querySelectorAll("[data-action]").forEach((button) => {
+        button.addEventListener("click", () => send(button.dataset.action));
+      });
+      document.querySelectorAll("[data-side]").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeSide = button.dataset.side;
+          document.querySelectorAll("[data-side]").forEach((item) =>
+            item.classList.toggle("active", item === button));
+          $("frame").src = `/api/frame.jpg?side=${activeSide}&t=${Date.now()}`;
+          pollState();
+        });
+      });
+      window.addEventListener("keydown", (event) => {
+        if (event.target instanceof HTMLInputElement) return;
+        const map = {s:"start", q:"quit", r:"reset", c:"mark_cleared"};
+        const action = event.code === "Space" ? "stop" : map[event.key.toLowerCase()];
+        if (action) send(action);
+      });
+      pollState();
+      setInterval(pollState, 500);
+    })();
+  </script>
+</body>
+</html>

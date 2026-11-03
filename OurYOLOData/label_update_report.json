@@ -1,0 +1,623 @@
+{
+  "updated_labels": 142,
+  "updated_by_split": {
+    "test": 13,
+    "val": 12,
+    "train": 117
+  },
+  "verified_garbage2_labels": 419,
+  "changed_images": 0,
+  "backup": "D:\\learning\\FPGA\\Guidance\\dataset_inspection\\OurYOLOData_before_label_update_20261031_174207",
+  "invalidated_caches": [],
+  "stats": {
+    "train": {
+      "images": 537,
+      "boxes": {
+        "Paper": 304,
+        "Plastic": 450,
+        "Cans": 334,
+        "Textile": 280,
+        "Glass_Bottles": 65,
+        "other": 207
+      },
+      "total_boxes": 1640,
+      "empty_labels": 22
+    },
+    "val": {
+      "images": 98,
+      "boxes": {
+        "Paper": 58,
+        "Plastic": 109,
+        "Cans": 49,
+        "Textile": 7,
+        "other": 64,
+        "Glass_Bottles": 6
+      },
+      "total_boxes": 293,
+      "empty_labels": 5
+    },
+    "test": {
+      "images": 90,
+      "boxes": {
+        "Glass_Bottles": 32,
+        "Plastic": 86,
+        "other": 42,
+        "Cans": 80,
+        "Paper": 12,
+        "Textile": 112
+      },
+      "total_boxes": 364,
+      "empty_labels": 0
+    }
+  },
+  "updates": [
+    {
+      "split": "test",
+      "label": "image419.txt"
+    },
+    {
+      "split": "test",
+      "label": "image424.txt"
+    },
+    {
+      "split": "test",
+      "label": "image433.txt"
+    },
+    {
+      "split": "test",
+      "label": "image441.txt"
+    },
+    {
+      "split": "test",
+      "label": "image490.txt"
+    },
+    {
+      "split": "test",
+      "label": "image492.txt"
+    },
+    {
+      "split": "test",
+      "label": "image493.txt"
+    },
+    {
+      "split": "test",
+      "label": "image506.txt"
+    },
+    {
+      "split": "test",
+      "label": "image508.txt"
+    },
+    {
+      "split": "test",
+      "label": "image509.txt"
+    },
+    {
+      "split": "test",
+      "label": "image510.txt"
+    },
+    {
+      "split": "test",
+      "label": "image527.txt"
+    },
+    {
+      "split": "test",
+      "label": "image610.txt"
+    },
+    {
+      "split": "val",
+      "label": "image361.txt"
+    },
+    {
+      "split": "val",
+      "label": "image362.txt"
+    },
+    {
+      "split": "val",
+      "label": "image364.txt"
+    },
+    {
+      "split": "val",
+      "label": "image366.txt"
+    },
+    {
+      "split": "val",
+      "label": "image368.txt"
+    },
+    {
+      "split": "val",
+      "label": "image370.txt"
+    },
+    {
+      "split": "val",
+      "label": "image388.txt"
+    },
+    {
+      "split": "val",
+      "label": "image390.txt"
+    },
+    {
+      "split": "val",
+      "label": "image391.txt"
+    },
+    {
+      "split": "val",
+      "label": "image392.txt"
+    },
+    {
+      "split": "val",
+      "label": "image394.txt"
+    },
+    {
+      "split": "val",
+      "label": "image395.txt"
+    },
+    {
+      "split": "train",
+      "label": "image321.txt"
+    },
+    {
+      "split": "train",
+      "label": "image322.txt"
+    },
+    {
+      "split": "train",
+      "label": "image324.txt"
+    },
+    {
+      "split": "train",
+      "label": "image326.txt"
+    },
+    {
+      "split": "train",
+      "label": "image327.txt"
+    },
+    {
+      "split": "train",
+      "label": "image328.txt"
+    },
+    {
+      "split": "train",
+      "label": "image329.txt"
+    },
+    {
+      "split": "train",
+      "label": "image330.txt"
+    },
+    {
+      "split": "train",
+      "label": "image331.txt"
+    },
+    {
+      "split": "train",
+      "label": "image333.txt"
+    },
+    {
+      "split": "train",
+      "label": "image334.txt"
+    },
+    {
+      "split": "train",
+      "label": "image345.txt"
+    },
+    {
+      "split": "train",
+      "label": "image351.txt"
+    },
+    {
+      "split": "train",
+      "label": "image356.txt"
+    },
+    {
+      "split": "train",
+      "label": "image399.txt"
+    },
+    {
+      "split": "train",
+      "label": "image400.txt"
+    },
+    {
+      "split": "train",
+      "label": "image401.txt"
+    },
+    {
+      "split": "train",
+      "label": "image402.txt"
+    },
+    {
+      "split": "train",
+      "label": "image403.txt"
+    },
+    {
+      "split": "train",
+      "label": "image404.txt"
+    },
+    {
+      "split": "train",
+      "label": "image405.txt"
+    },
+    {
+      "split": "train",
+      "label": "image406.txt"
+    },
+    {
+      "split": "train",
+      "label": "image408.txt"
+    },
+    {
+      "split": "train",
+      "label": "image409.txt"
+    },
+    {
+      "split": "train",
+      "label": "image448.txt"
+    },
+    {
+      "split": "train",
+      "label": "image449.txt"
+    },
+    {
+      "split": "train",
+      "label": "image454.txt"
+    },
+    {
+      "split": "train",
+      "label": "image455.txt"
+    },
+    {
+      "split": "train",
+      "label": "image456.txt"
+    },
+    {
+      "split": "train",
+      "label": "image457.txt"
+    },
+    {
+      "split": "train",
+      "label": "image458.txt"
+    },
+    {
+      "split": "train",
+      "label": "image459.txt"
+    },
+    {
+      "split": "train",
+      "label": "image460.txt"
+    },
+    {
+      "split": "train",
+      "label": "image461.txt"
+    },
+    {
+      "split": "train",
+      "label": "image462.txt"
+    },
+    {
+      "split": "train",
+      "label": "image463.txt"
+    },
+    {
+      "split": "train",
+      "label": "image464.txt"
+    },
+    {
+      "split": "train",
+      "label": "image465.txt"
+    },
+    {
+      "split": "train",
+      "label": "image466.txt"
+    },
+    {
+      "split": "train",
+      "label": "image467.txt"
+    },
+    {
+      "split": "train",
+      "label": "image468.txt"
+    },
+    {
+      "split": "train",
+      "label": "image469.txt"
+    },
+    {
+      "split": "train",
+      "label": "image470.txt"
+    },
+    {
+      "split": "train",
+      "label": "image471.txt"
+    },
+    {
+      "split": "train",
+      "label": "image472.txt"
+    },
+    {
+      "split": "train",
+      "label": "image473.txt"
+    },
+    {
+      "split": "train",
+      "label": "image474.txt"
+    },
+    {
+      "split": "train",
+      "label": "image478.txt"
+    },
+    {
+      "split": "train",
+      "label": "image481.txt"
+    },
+    {
+      "split": "train",
+      "label": "image483.txt"
+    },
+    {
+      "split": "train",
+      "label": "image484.txt"
+    },
+    {
+      "split": "train",
+      "label": "image487.txt"
+    },
+    {
+      "split": "train",
+      "label": "image528.txt"
+    },
+    {
+      "split": "train",
+      "label": "image535.txt"
+    },
+    {
+      "split": "train",
+      "label": "image540.txt"
+    },
+    {
+      "split": "train",
+      "label": "image546.txt"
+    },
+    {
+      "split": "train",
+      "label": "image550.txt"
+    },
+    {
+      "split": "train",
+      "label": "image573.txt"
+    },
+    {
+      "split": "train",
+      "label": "image584.txt"
+    },
+    {
+      "split": "train",
+      "label": "image586.txt"
+    },
+    {
+      "split": "train",
+      "label": "image588.txt"
+    },
+    {
+      "split": "train",
+      "label": "image590.txt"
+    },
+    {
+      "split": "train",
+      "label": "image593.txt"
+    },
+    {
+      "split": "train",
+      "label": "image594.txt"
+    },
+    {
+      "split": "train",
+      "label": "image596.txt"
+    },
+    {
+      "split": "train",
+      "label": "image618.txt"
+    },
+    {
+      "split": "train",
+      "label": "image621.txt"
+    },
+    {
+      "split": "train",
+      "label": "image625.txt"
+    },
+    {
+      "split": "train",
+      "label": "image626.txt"
+    },
+    {
+      "split": "train",
+      "label": "image627.txt"
+    },
+    {
+      "split": "train",
+      "label": "image630.txt"
+    },
+    {
+      "split": "train",
+      "label": "image643.txt"
+    },
+    {
+      "split": "train",
+      "label": "image651.txt"
+    },
+    {
+      "split": "train",
+      "label": "image669.txt"
+    },
+    {
+      "split": "train",
+      "label": "image670.txt"
+    },
+    {
+      "split": "train",
+      "label": "image671.txt"
+    },
+    {
+      "split": "train",
+      "label": "image672.txt"
+    },
+    {
+      "split": "train",
+      "label": "image673.txt"
+    },
+    {
+      "split": "train",
+      "label": "image674.txt"
+    },
+    {
+      "split": "train",
+      "label": "image676.txt"
+    },
+    {
+      "split": "train",
+      "label": "image677.txt"
+    },
+    {
+      "split": "train",
+      "label": "image678.txt"
+    },
+    {
+      "split": "train",
+      "label": "image679.txt"
+    },
+    {
+      "split": "train",
+      "label": "image680.txt"
+    },
+    {
+      "split": "train",
+      "label": "image681.txt"
+    },
+    {
+      "split": "train",
+      "label": "image682.txt"
+    },
+    {
+      "split": "train",
+      "label": "image683.txt"
+    },
+    {
+      "split": "train",
+      "label": "image685.txt"
+    },
+    {
+      "split": "train",
+      "label": "image687.txt"
+    },
+    {
+      "split": "train",
+      "label": "image688.txt"
+    },
+    {
+      "split": "train",
+      "label": "image693.txt"
+    },
+    {
+      "split": "train",
+      "label": "image695.txt"
+    },
+    {
+      "split": "train",
+      "label": "image699.txt"
+    },
+    {
+      "split": "train",
+      "label": "image700.txt"
+    },
+    {
+      "split": "train",
+      "label": "image701.txt"
+    },
+    {
+      "split": "train",
+      "label": "image702.txt"
+    },
+    {
+      "split": "train",
+      "label": "image703.txt"
+    },
+    {
+      "split": "train",
+      "label": "image704.txt"
+    },
+    {
+      "split": "train",
+      "label": "image705.txt"
+    },
+    {
+      "split": "train",
+      "label": "image706.txt"
+    },
+    {
+      "split": "train",
+      "label": "image707.txt"
+    },
+    {
+      "split": "train",
+      "label": "image708.txt"
+    },
+    {
+      "split": "train",
+      "label": "image709.txt"
+    },
+    {
+      "split": "train",
+      "label": "image710.txt"
+    },
+    {
+      "split": "train",
+      "label": "image711.txt"
+    },
+    {
+      "split": "train",
+      "label": "image712.txt"
+    },
+    {
+      "split": "train",
+      "label": "image713.txt"
+    },
+    {
+      "split": "train",
+      "label": "image714.txt"
+    },
+    {
+      "split": "train",
+      "label": "image715.txt"
+    },
+    {
+      "split": "train",
+      "label": "image716.txt"
+    },
+    {
+      "split": "train",
+      "label": "image717.txt"
+    },
+    {
+      "split": "train",
+      "label": "image718.txt"
+    },
+    {
+      "split": "train",
+      "label": "image719.txt"
+    },
+    {
+      "split": "train",
+      "label": "image720.txt"
+    },
+    {
+      "split": "train",
+      "label": "image721.txt"
+    },
+    {
+      "split": "train",
+      "label": "image722.txt"
+    },
+    {
+      "split": "train",
+      "label": "image724.txt"
+    }
+  ]
+}

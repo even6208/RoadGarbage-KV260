@@ -1,0 +1,7 @@
+path: D:/learning/FPGA/Guidance/OurYOLOData
+train: images/train
+val: images/val
+test: images/test
+
+nc: 6
+names: [Cans, Glass_Bottles, Paper, Plastic, Textile, other]

@@ -1,0 +1,6 @@
+Cans
+Glass_Bottles
+Paper
+Plastic
+Textile
+other
